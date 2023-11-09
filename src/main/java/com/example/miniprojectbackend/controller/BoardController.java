@@ -22,7 +22,7 @@ public class BoardController {
         }
 
         if (service.save(board)) { // true - 200 응답 코드
-            ResponseEntity.ok().build();
+            return ResponseEntity.ok().build();
         }
         return ResponseEntity.internalServerError().build();
 
