@@ -13,11 +13,12 @@ import java.util.Map;
 public class BoardService {
     private final BoardMapper mapper;
 
+    // 저장 로직
     public boolean save(Board board) {
         return mapper.insert(board) == 1;
     }
 
-    // 게시물이 비었는지 검증하는 서비스
+    // null 값 여부 검증 로직
     public boolean validate(Board board) {
         if (board == null) {
             return false;
@@ -40,15 +41,17 @@ public class BoardService {
         }
         return true;
     }
-
+    // 리스트 로직
     public List<Board> list() {
         return mapper.loadList();
     }
 
+    // 글 가져오는 로직
     public Board get(Integer id) {  // view
         return mapper.selectById(id);
     }
 
+    // 글 삭제 로직
     public boolean remove(Integer id) {
         return mapper.deleteById(id);
     }
