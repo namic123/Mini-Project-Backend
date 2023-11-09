@@ -5,6 +5,9 @@ import com.example.miniprojectbackend.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -36,5 +39,17 @@ public class BoardService {
 
         }
         return true;
+    }
+
+    public List<Board> list() {
+        return mapper.loadList();
+    }
+
+    public Board get(Integer id) {  // view
+        return mapper.selectById(id);
+    }
+
+    public boolean remove(Integer id) {
+        return mapper.deleteById(id);
     }
 }
