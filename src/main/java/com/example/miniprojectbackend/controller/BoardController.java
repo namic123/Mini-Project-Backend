@@ -17,7 +17,11 @@ public class BoardController {
 
     @PostMapping("add")
     public ResponseEntity add(@RequestBody Board board) {  // 요청 본문을 가져옴
-        if (service.save(board)) {
+        if(!service.validate(board)){   // 검증 코드
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (service.save(board)) { // true - 200 응답 코드
             ResponseEntity.ok().build();
         }
         return ResponseEntity.internalServerError().build();
