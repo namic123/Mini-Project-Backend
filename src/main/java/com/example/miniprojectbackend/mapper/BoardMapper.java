@@ -1,10 +1,9 @@
 package com.example.miniprojectbackend.mapper;
 
 import com.example.miniprojectbackend.domain.Board;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
 import java.util.Map;
@@ -34,4 +33,13 @@ public interface BoardMapper {
     DELETE FROM board WHERE id = #{id}
 """)
     boolean deleteById(Integer id);
+
+@Update("""
+        UPDATE board 
+        SET title =#{title}, 
+        content = #{content},
+        writer = #{writer}
+        WHERE id = #{id}
+        """)
+    boolean update(Board board);
 }
