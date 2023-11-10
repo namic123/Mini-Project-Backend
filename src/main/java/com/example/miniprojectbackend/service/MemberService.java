@@ -5,6 +5,8 @@ import com.example.miniprojectbackend.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -39,4 +41,7 @@ public class MemberService {
         return true;
     }
 
+    public List<Member> list() {
+        return mapper.selectAll();
+    }
 }
