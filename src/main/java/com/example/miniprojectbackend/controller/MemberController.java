@@ -55,5 +55,10 @@ public class MemberController {
         return service.list();
     }
 
-
+    // 회원 보기
+    @GetMapping
+    public ResponseEntity<Member> view(String id){
+        Member member = service.getMember(id);
+        return ResponseEntity.ok(member);
+    }
 }

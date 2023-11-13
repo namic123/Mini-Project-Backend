@@ -50,4 +50,9 @@ public class MemberService {
     public List<Member> list() {
         return mapper.selectAll();
     }
+
+    // 회원 보기 로직
+    public Member getMember(String id) {
+        return mapper.getMemberById(id);
+    }
 }
