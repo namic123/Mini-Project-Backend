@@ -29,6 +29,10 @@ public class MemberService {
         return mapper.selectEmail(email);
     }
 
+    public String getNickName(String nickName) {
+        return mapper.selectNickName(nickName);
+    }
+
     // 회원 등록 요청 시 null 값 검증 로직
     public boolean validate(Member member) {
         if (member == null) {
@@ -47,21 +51,22 @@ public class MemberService {
     }
 
     // 회원 목록 로직
+
     public List<Member> list() {
         return mapper.selectAll();
     }
-
     // 회원 보기 로직
+
     public Member getMember(String id) {
         return mapper.getMemberById(id);
     }
-
     // 회원 탈퇴 로직
+
     public boolean deleteMember(String id) {
         return mapper.deleteById(id) == 1;
     }
-
     // 회원 수정 로직
+
     public boolean update(Member member) {
 /*        Member oldMember = mapper.getMemberById(member.getId());
         if(member.getPassword().equals("")){

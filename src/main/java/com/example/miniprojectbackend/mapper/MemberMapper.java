@@ -10,7 +10,7 @@ public interface MemberMapper {
 
     // 회원 등록 쿼리
     @Insert("""
-                INSERT INTO member (id,password,email)VALUES (#{id},#{password},#{email})
+                INSERT INTO member (id,password,email,nickName)VALUES (#{id},#{password},#{email}, #{nickName})
             """)
     int insert(Member member);
 
@@ -21,34 +21,43 @@ public interface MemberMapper {
             """)
     String selectId(String id);
 
+    // 닉네임 중복 체크 쿼리
+    @Select("""
+                    SELECT nickName FROM member
+                    WHERE nickName = #{nickName}
+            """)
+    String selectNickName(String nickName);
+
+
     // Email 중복 체크 쿼리
+
     @Select("""
                     SELECT email FROM member
                     WHERE email = #{email}
             """)
     String selectEmail(String email);
-
     // 전체 회원 목록 쿼리
+
     @Select("""
-            SELECT id, password, email, inserted FROM member ORDER BY inserted DESC;
+            SELECT * FROM member ORDER BY inserted DESC;
             """)
     List<Member> selectAll();
-
     // 회원 정보 보기 쿼리
+
     @Select("""
-            SELECT id, password, email FROM member WHERE id = #{id};
+            SELECT id,nickName, password, email FROM member WHERE id = #{id};
             """)
     Member getMemberById(String id);
-
     // 회원 탈퇴 쿼리
+
     @Delete("""
                 DELETE FROM member
                 WHERE id = #{id};
             """)
     int deleteById(String id);
-
     // 회원 수정 쿼리
     // Dynamic SQL 쿼리문
+
     @Update("""
         <script>
         UPDATE member
@@ -56,7 +65,8 @@ public interface MemberMapper {
           <if test="password != ''">
           password = #{password},
           </if>
-          email = #{email}
+          email = #{email},
+          nickName = #{nickName}
         WHERE id = #{id}
         </script>
         """)
