@@ -55,4 +55,9 @@ public class MemberService {
     public Member getMember(String id) {
         return mapper.getMemberById(id);
     }
+
+    // 회원 탈퇴 로직
+    public boolean deleteMember(String id) {
+        return mapper.deleteById(id) == 1;
+    }
 }

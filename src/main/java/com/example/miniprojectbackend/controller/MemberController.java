@@ -61,4 +61,18 @@ public class MemberController {
         Member member = service.getMember(id);
         return ResponseEntity.ok(member);
     }
+
+
+    // 회원 탈퇴
+    @DeleteMapping
+    public ResponseEntity delete(String id){
+        // TODO: 로그인 여부 -> 안한경우 : 401
+        // TODO: 본인 정보 여부 -> 아닌경우: 403
+
+        /* 성공 값 */
+        if(service.deleteMember(id)){
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.internalServerError().build();
+    }
 }
