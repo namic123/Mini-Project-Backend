@@ -60,4 +60,14 @@ public class MemberService {
     public boolean deleteMember(String id) {
         return mapper.deleteById(id) == 1;
     }
+
+    // 회원 수정 로직
+    public boolean update(Member member) {
+/*        Member oldMember = mapper.getMemberById(member.getId());
+        if(member.getPassword().equals("")){
+            member.setPassword(oldMember.getPassword());
+        }*/
+
+        return mapper.updateMember(member) == 1;
+    }
 }

@@ -75,4 +75,16 @@ public class MemberController {
         }
         return ResponseEntity.internalServerError().build();
     }
+
+    // 회원 수정
+    @PutMapping("edit")
+    public ResponseEntity edit(@RequestBody Member member){
+        // TODO: 로그인 여부 및 본인 정보 여부 확인
+        if(service.update(member)){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
 }

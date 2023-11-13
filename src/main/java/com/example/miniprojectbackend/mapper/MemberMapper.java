@@ -1,10 +1,7 @@
 package com.example.miniprojectbackend.mapper;
 
 import com.example.miniprojectbackend.domain.Member;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -45,8 +42,24 @@ public interface MemberMapper {
 
     // 회원 탈퇴 쿼리
     @Delete("""
-    DELETE FROM member
-    WHERE id = #{id};
-""")
+                DELETE FROM member
+                WHERE id = #{id};
+            """)
     int deleteById(String id);
+
+    // 회원 수정 쿼리
+    // Dynamic SQL 쿼리문
+    @Update("""
+        <script>
+        UPDATE member
+        SET 
+          <if test="password != ''">
+          password = #{password},
+          </if>
+          email = #{email}
+        WHERE id = #{id}
+        </script>
+        """)
+
+    int updateMember(Member member);
 }
