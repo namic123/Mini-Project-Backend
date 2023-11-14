@@ -3,6 +3,7 @@ package com.example.miniprojectbackend.controller;
 import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,6 +94,16 @@ public class MemberController {
             return ResponseEntity.ok().build();
         }else {
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("login")
+    public ResponseEntity login(@RequestBody Member member){
+        System.out.println("MemberController.login");
+        if(service.login(member)){
+            return ResponseEntity.ok().build();
+        }else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 

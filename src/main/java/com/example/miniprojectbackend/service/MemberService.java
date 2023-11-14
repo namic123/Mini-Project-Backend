@@ -75,4 +75,14 @@ public class MemberService {
 
         return mapper.updateMember(member) == 1;
     }
+
+    public boolean login(Member member) {
+        Member dbMember = mapper.getMemberById(member.getId());
+        if(dbMember != null){
+            if (dbMember.getPassword().equals(member.getPassword())){
+                return true;
+            }
+        }
+        return false;
+    }
 }
