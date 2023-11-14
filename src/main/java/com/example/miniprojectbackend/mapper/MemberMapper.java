@@ -1,5 +1,6 @@
 package com.example.miniprojectbackend.mapper;
 
+import com.example.miniprojectbackend.domain.Auth;
 import com.example.miniprojectbackend.domain.Member;
 import org.apache.ibatis.annotations.*;
 
@@ -72,4 +73,10 @@ public interface MemberMapper {
         """)
 
     int updateMember(Member member);
+
+    @Select("""
+    SELECT * FROM auth
+    WHERE memberId = #{id}
+""")
+    List<Auth> selectAuthById(String id);
 }
