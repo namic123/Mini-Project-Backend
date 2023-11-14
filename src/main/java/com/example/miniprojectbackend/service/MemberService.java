@@ -101,4 +101,8 @@ public class MemberService {
         // 로그인 실패
         return false;
     }
+
+    public boolean hasAccess(String id, Member login) {
+        return login.getId().equals(id);
+    }
 }

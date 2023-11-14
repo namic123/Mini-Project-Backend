@@ -69,7 +69,15 @@ public class MemberController {
 
     // 회원 보기
     @GetMapping
-    public ResponseEntity<Member> view(String id){
+    public ResponseEntity<Member> view(String id,
+                                       @SessionAttribute(value = "login", required = false) Member login){
+        if(login==null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        if(!service.hasAccess(id, login)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Member member = service.getMember(id);
         return ResponseEntity.ok(member);
     }
@@ -77,9 +85,16 @@ public class MemberController {
 
     // 회원 탈퇴
     @DeleteMapping
-    public ResponseEntity delete(String id){
-        // TODO: 로그인 여부 -> 안한경우 : 401
-        // TODO: 본인 정보 여부 -> 아닌경우: 403
+    public ResponseEntity delete(String id,
+                                 @SessionAttribute(value = "login", required = false) Member login){
+
+        if(login == null){
+            // 401 에러
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if(!service.hasAccess(id,login)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         /* 성공 값 */
         if(service.deleteMember(id)){
@@ -90,8 +105,16 @@ public class MemberController {
 
     // 회원 수정
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Member member){
-        // TODO: 로그인 여부 및 본인 정보 여부 확인
+    public ResponseEntity edit(@RequestBody Member member,
+                               @SessionAttribute(value = "login", required = false) Member login){
+       if(login==null){
+           // 401
+           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+       }
+       if(!service.hasAccess(member.getId(),login)){
+           return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+       }
+
         if(service.update(member)){
             return ResponseEntity.ok().build();
         }else {
