@@ -71,10 +71,12 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<Member> view(String id,
                                        @SessionAttribute(value = "login", required = false) Member login){
+        // 비로그인 상태
         if(login==null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
+        // 접근 권한 가능 여부
         if(!service.hasAccess(id, login)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -88,10 +90,13 @@ public class MemberController {
     public ResponseEntity delete(String id,
                                  @SessionAttribute(value = "login", required = false) Member login){
 
+        // 비로그인 상태
         if(login == null){
             // 401 에러
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
+        // 접근 권한 가능 여부
         if(!service.hasAccess(id,login)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
@@ -107,13 +112,16 @@ public class MemberController {
     @PutMapping("edit")
     public ResponseEntity edit(@RequestBody Member member,
                                @SessionAttribute(value = "login", required = false) Member login){
-       if(login==null){
-           // 401
-           return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-       }
-       if(!service.hasAccess(member.getId(),login)){
-           return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-       }
+        // 비로그인 상태
+        if(login == null){
+            // 401 에러
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        // 접근 권한 가능 여부
+        if(!service.hasAccess(member.getId(),login)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
         if(service.update(member)){
             return ResponseEntity.ok().build();
