@@ -23,7 +23,8 @@ public interface BoardMapper {
     @Select("""
                 SELECT b.id, 
                 b.title, 
-                m.nickName writer, 
+                b.writer,
+                m.nickName, 
                 b.inserted 
                 FROM board b
                 JOIN member m ON b.writer = m.id
@@ -34,14 +35,15 @@ public interface BoardMapper {
     // 게시글 보기 쿼리
     // 게시글에 nickname을 보여주기 위한 조인
     @Select("""
-        SELECT b.id,
-               b.title, 
-               b.content, 
-               m.nickName writer, 
-               b.inserted
-            FROM board b JOIN member m ON b.writer = m.id
-            WHERE b.id = #{id}
-            """)
+            SELECT b.id,
+                   b.title, 
+                   b.content, 
+                   b.writer, 
+                   m.nickName,
+                   b.inserted
+                FROM board b JOIN member m ON b.writer = m.id
+                WHERE b.id = #{id}
+                """)
     Board selectById(Integer id);
 
     // 게시글 삭제 쿼리
