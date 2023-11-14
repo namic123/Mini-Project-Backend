@@ -83,6 +83,7 @@ public class BoardController {
         if (login == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //401
         }
+        // 권한이 없는 경우
         if(!service.hasAccess(board.getId(),login)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }

@@ -110,6 +110,22 @@ public class MemberService {
 
     // 접근 권한 여부 로직
     public boolean hasAccess(String id, Member login) {
+        if(isAdmin(login)){
+            return true;
+        }
+
         return login.getId().equals(id);
+    }
+
+    // 관리자 여부 검증 로직
+    public boolean isAdmin(Member login){
+        if(login.getAuth() != null){
+            // 로그인의 auth 리스트의 요소 중 admin이 있는지 확인
+            return login.getAuth()
+                    .stream()
+                    .map((e)-> e.getName())
+                    .anyMatch(n->n.equals("admin"));
+        }
+        return false;
     }
 }

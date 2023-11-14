@@ -12,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardMapper mapper;
+    private final MemberService memberService;
 
     // 게시글 등록 로직
     public boolean save(Board board, Member login) {
@@ -60,9 +61,13 @@ public class BoardService {
 
     // 접근 권한 가능 여부
     public boolean hasAccess(Integer id, Member login) {
+        if( memberService.isAdmin(login)){
+            return true;
+        }
         // 해당 글의 작성자 id를 가져옴
         Board board = mapper.selectById(id);
         // 작성자와 로그인 아이디가 동일한지 검증
         return board.getWriter().equals(login.getId());
     }
+
 }
