@@ -2,6 +2,7 @@ package com.example.miniprojectbackend.controller;
 
 import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.service.MemberService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -99,12 +100,23 @@ public class MemberController {
     }
 
     // 로그인
+    // WebRequest는 HTTP 요청에 대한 정보를 담고 있음.
     @PostMapping("login")
     public ResponseEntity login(@RequestBody Member member, WebRequest request){
+        // 로그인 성공 여부 로직
         if(service.login(member, request)){
+            // 성공 시 200
             return ResponseEntity.ok().build();
         }else {
+            // 실패 시 401(Unauthorized)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PostMapping("logout")
+    public void logout(HttpSession session){
+        if(session != null){
+            session.invalidate();
         }
     }
 

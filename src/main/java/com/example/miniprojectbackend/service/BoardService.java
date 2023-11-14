@@ -34,11 +34,6 @@ public class BoardService {
 
         }
 
-        // 작성자 검증
-        if (board.getWriter() == null || board.getWriter().isBlank()) {
-            return false;
-
-        }
         return true;
     }
     // 게시글 목록 로직
