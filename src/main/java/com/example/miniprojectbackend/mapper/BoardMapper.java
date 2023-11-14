@@ -19,17 +19,28 @@ public interface BoardMapper {
     int insert(Board board);
 
     // 게시글 목록 쿼리
+    // 게시글 목록에 nickname을 보여주기 위한 조인
     @Select("""
-                SELECT * FROM board
+                SELECT b.id, 
+                b.title, 
+                m.nickName writer, 
+                b.inserted 
+                FROM board b
+                JOIN member m ON b.writer = m.id
                 ORDER BY id DESC ;
             """)
     List<Board> loadList();
 
     // 게시글 보기 쿼리
+    // 게시글에 nickname을 보여주기 위한 조인
     @Select("""
-                SELECT *
-                FROM board
-                WHERE id = #{id}
+        SELECT b.id,
+               b.title, 
+               b.content, 
+               m.nickName writer, 
+               b.inserted
+            FROM board b JOIN member m ON b.writer = m.id
+            WHERE b.id = #{id}
             """)
     Board selectById(Integer id);
 
@@ -48,4 +59,10 @@ public interface BoardMapper {
             WHERE id = #{id}
             """)
     boolean update(Board board);
+
+    // 회원 탈퇴를 위한 게시글 삭제 쿼리
+    @Delete("""
+    DELETE FROM board WHERE writer = #{writer}
+""")
+    int deleteByWriter(String writer);
 }

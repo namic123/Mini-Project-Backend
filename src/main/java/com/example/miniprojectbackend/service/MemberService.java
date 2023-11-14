@@ -1,6 +1,7 @@
 package com.example.miniprojectbackend.service;
 
 import com.example.miniprojectbackend.domain.Member;
+import com.example.miniprojectbackend.mapper.BoardMapper;
 import com.example.miniprojectbackend.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberMapper mapper;
+    private final BoardMapper boardMapper;
 
     // 회원 등록 로직
     // 성공 여부를 반환
@@ -64,6 +66,8 @@ public class MemberService {
 
     // 회원 탈퇴 로직
     public boolean deleteMember(String id) {
+        boardMapper.deleteByWriter(id);
+        
         return mapper.deleteById(id) == 1;
     }
 
@@ -102,6 +106,7 @@ public class MemberService {
         return false;
     }
 
+    // 접근 권한 여부 로직
     public boolean hasAccess(String id, Member login) {
         return login.getId().equals(id);
     }
