@@ -4,6 +4,7 @@ import com.example.miniprojectbackend.domain.Board;
 import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +21,20 @@ public class BoardController {
 
     // 게시글 저장 요청
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody Board board, @SessionAttribute(value = "login", required = false) Member login) {
+    public ResponseEntity add(@RequestBody Board board,
+                              // HTTP 세션에서 login 속성을 Member 객체로 가져온다.
+                              // 즉, 로그인 시에 세션 정보가 브라우저에 저장이되고,
+                              // 그 세션 정보를 가져오는 것
+                              @SessionAttribute(value = "login", required = false) Member login) {
+        if(login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         if(!service.validate(board)){  // 검증 코드
             return ResponseEntity.badRequest().build(); // 400 상태코드
         }
 
-        if (service.save(board)) { // 저장 성공
+        if (service.save(board, login)) { // 저장 성공
             return ResponseEntity.ok().build(); // 200 응답 상태
         }
         return ResponseEntity.internalServerError().build(); // 500 상태코드

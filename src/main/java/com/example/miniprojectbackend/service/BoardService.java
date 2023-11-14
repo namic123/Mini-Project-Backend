@@ -1,12 +1,12 @@
 package com.example.miniprojectbackend.service;
 
 import com.example.miniprojectbackend.domain.Board;
+import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.mapper.BoardMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +14,8 @@ public class BoardService {
     private final BoardMapper mapper;
 
     // 게시글 등록 로직
-    public boolean save(Board board) {
+    public boolean save(Board board, Member login) {
+        board.setWriter(login.getId());
         return mapper.insert(board) == 1;
     }
 
