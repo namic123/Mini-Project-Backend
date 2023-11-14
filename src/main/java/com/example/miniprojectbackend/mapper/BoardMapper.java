@@ -28,7 +28,7 @@ public interface BoardMapper {
                 b.inserted 
                 FROM board b
                 JOIN member m ON b.writer = m.id
-                ORDER BY id DESC ;
+                ORDER BY b.id DESC ;
             """)
     List<Board> loadList();
 

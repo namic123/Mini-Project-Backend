@@ -144,6 +144,7 @@ public class MemberController {
         }
     }
 
+    // 로그아웃
     @PostMapping("logout")
     public void logout(HttpSession session){
         // 세션이 비어있지 않은 경우
@@ -152,5 +153,10 @@ public class MemberController {
             session.invalidate();
         }
     }
+
+    @GetMapping("login")
+    public Member login(@SessionAttribute(value = "login", required = false) Member login) {
+        return login;
+    };
 
 }
