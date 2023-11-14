@@ -1,6 +1,7 @@
 package com.example.miniprojectbackend.controller;
 
 import com.example.miniprojectbackend.domain.Board;
+import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class BoardController {
 
     // 게시글 저장 요청
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody Board board) {
+    public ResponseEntity add(@RequestBody Board board, @SessionAttribute(value = "login", required = false) Member login) {
         if(!service.validate(board)){  // 검증 코드
             return ResponseEntity.badRequest().build(); // 400 상태코드
         }

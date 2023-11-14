@@ -20,14 +20,14 @@ public interface BoardMapper {
 
     // 게시글 목록 쿼리
     @Select("""
-                SELECT id, title, writer, inserted FROM board
+                SELECT * FROM board
                 ORDER BY id DESC ;
             """)
     List<Board> loadList();
 
     // 게시글 보기 쿼리
     @Select("""
-                SELECT id, title, content, writer, inserted
+                SELECT *
                 FROM board
                 WHERE id = #{id}
             """)
