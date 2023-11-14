@@ -15,6 +15,7 @@ public class BoardService {
 
     // 게시글 등록 로직
     public boolean save(Board board, Member login) {
+        // 글 작성 시 작성자를 ID로 서정
         board.setWriter(login.getId());
         return mapper.insert(board) == 1;
     }
@@ -55,5 +56,13 @@ public class BoardService {
     // 게시글 수정 로직
     public boolean update(Board board) {
         return mapper.update(board);
+    }
+
+    // 접근 권한 가능 여부
+    public boolean hasAccess(Integer id, Member login) {
+        // 해당 글의 작성자 id를 가져옴
+        Board board = mapper.selectById(id);
+        // 작성자와 로그인 아이디가 동일한지 검증
+        return board.getWriter().equals(login.getId());
     }
 }

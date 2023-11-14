@@ -22,11 +22,13 @@ public class BoardController {
     // 게시글 저장 요청
     @PostMapping("add")
     public ResponseEntity add(@RequestBody Board board,
-                              // HTTP 세션에서 login 속성을 Member 객체로 가져온다.
-                              // 즉, 로그인 시에 세션 정보가 브라우저에 저장이되고,
-                              // 그 세션 정보를 가져오는 것
+                              // HTTP 세션에서 login 속성에 저장된 Member 객체를 가져온다.
+                              // 그 세션에서 추출한 LOGIN 속성의 값이 login 매개변수에 주입
+                              // 매개변수 login을 통해 권한 여부를 결정
                               @SessionAttribute(value = "login", required = false) Member login) {
+        // 비로그인 상태인 경우
         if(login == null){
+            // 권한 없음 상태코드 반환
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -55,7 +57,17 @@ public class BoardController {
 
     // 게시글 삭제 요청
     @DeleteMapping("remove/{id}")
-    public ResponseEntity remove(@PathVariable Integer id){
+    public ResponseEntity remove(@PathVariable Integer id,
+                                 @SessionAttribute(value = "login",required = false) Member login){
+        // 비 로그인 상태일 경우
+        if(login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // 접근 권한이 없는 경우
+        if (!service.hasAccess(id, login)) {
+            // 403 응답
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         if(service.remove(id)){
             return ResponseEntity.ok().build();     // 200 상태코드 (요청 성공)
         }else{

@@ -87,7 +87,12 @@ public class MemberService {
             if (dbMember.getPassword().equals(member.getPassword())){
                 // 보안상, 비밀번호 필드를 비움
                 dbMember.setPassword("");
-                // 세션에 사용자 정보를 정보를 저장, 사용자가 로그인 상태를 유지하고 있는지 추적
+                // 해당 member의 정보를 담는 객체를 웹 서버의 세션 영역에 'login'이라는 이름의 속성에 저장,
+                // 웹 서버는 사용자의 브라우저에 세션 ID를 쿠키 형태로 전송한다.
+                // 사용자 브라우저에는 SessinID로 저장되어 있으므로, 사용자 요청 시 Session ID와 함께 요청이 되고
+                // 서버는 이 세션 ID로 세션 정보 접근 가능
+                // 여기서는 사용자가 로그인 상태를 유지하고 있는지 추적하는 역할을 함.
+                // login 속성은 세션 영역에 저장되어 있으므로, @SessionAttribute를 통해 객체를 가져올 수 있음
                 request.setAttribute("login", dbMember, RequestAttributes.SCOPE_SESSION);
                 // 로그인 성공
                 return true;
