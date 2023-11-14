@@ -77,7 +77,15 @@ public class BoardController {
 
     // 게시글 수정
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Board board){
+    public ResponseEntity edit(@RequestBody Board board,
+                               @SessionAttribute(value = "login",required = false) Member login){
+
+        if (login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //401
+        }
+        if(!service.hasAccess(board.getId(),login)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         if(service.validate(board)) {       // null 값 검증 service 로직
             if (service.update(board)) {        // 업데이트 로직
                 return ResponseEntity.ok().build();         // 200 성공

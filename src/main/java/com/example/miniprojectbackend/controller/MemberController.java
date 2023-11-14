@@ -115,7 +115,9 @@ public class MemberController {
 
     @PostMapping("logout")
     public void logout(HttpSession session){
+        // 세션이 비어있지 않은 경우
         if(session != null){
+            // HTTP 세션 무효화, 세션에 저장된 모든 데이터 제거
             session.invalidate();
         }
     }
