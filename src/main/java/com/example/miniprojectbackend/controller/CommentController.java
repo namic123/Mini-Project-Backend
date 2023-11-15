@@ -41,4 +41,18 @@ public class CommentController {
     public List<Comment> list(@RequestParam("id") Integer boardId){
         return service.list(boardId);
     }
+    @DeleteMapping("remove/{id}")
+    public ResponseEntity remove(@PathVariable Integer id,
+                                 @SessionAttribute(value = "login", required = false)Member login){
+
+        if(login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        }
+        if(service.remove(id)){
+            return ResponseEntity.ok().build();
+        }else{
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }
