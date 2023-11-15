@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-// 댓글 컨트롤러
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/comment")
@@ -22,14 +21,18 @@ public class CommentController {
         if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
         if (service.validate(comment)) {
             if (service.add(comment, login)) {
                 return ResponseEntity.ok().build();
             } else {
                 return ResponseEntity.internalServerError().build();
             }
+
         } else {
             return ResponseEntity.badRequest().build();
         }
+
     }
 }
+// 댓글 컨트롤러

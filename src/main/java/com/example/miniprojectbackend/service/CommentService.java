@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-    private CommentMapper mapper;
+    private final CommentMapper mapper;
 
     public boolean add(Comment comment, Member login) {
         comment.setMemberId(login.getId());
@@ -20,12 +20,16 @@ public class CommentService {
         if (comment == null) {
             return false;
         }
+
         if (comment.getBoardId() == null || comment.getBoardId() < 1) {
             return false;
         }
+
         if (comment.getComment() == null || comment.getComment().isBlank()) {
             return false;
         }
+
         return true;
     }
 }
+
