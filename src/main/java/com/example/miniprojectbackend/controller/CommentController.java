@@ -49,10 +49,15 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
         }
-        if(service.remove(id)){
-            return ResponseEntity.ok().build();
-        }else{
-            return ResponseEntity.internalServerError().build();
+
+        if(service.hasAccess(id, login)){
+            if(service.remove(id)){
+                return ResponseEntity.ok().build();
+            }else{
+                return ResponseEntity.internalServerError().build();
+            }
+        }else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
 }

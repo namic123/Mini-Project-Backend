@@ -42,5 +42,10 @@ public class CommentService {
     public boolean remove(Integer id) {
         return mapper.remove(id);
     }
+
+    public boolean hasAccess(Integer id, Member login) {
+        Comment comment = mapper.selectById(id);
+        return comment.getMemberId().equals(login.getId());
+    }
 }
 
