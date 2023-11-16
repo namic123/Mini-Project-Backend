@@ -60,4 +60,9 @@ public class CommentController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
     }
+    @PutMapping("edit")
+    public ResponseEntity update(@RequestBody Comment comment){
+        service.update(comment);
+        return ResponseEntity.ok().build();
+    }
 }
