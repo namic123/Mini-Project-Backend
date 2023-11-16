@@ -25,9 +25,12 @@ public interface BoardMapper {
                 b.title, 
                 b.writer,
                 m.nickName, 
-                b.inserted 
+                b.inserted,
+                COUNT(c.id) commentNum
                 FROM board b
                 JOIN member m ON b.writer = m.id
+                LEFT JOIN comment c on b.id =c.boardId
+                GROUP BY b.id
                 ORDER BY b.id DESC ;
             """)
     List<Board> loadList();
@@ -48,7 +51,8 @@ public interface BoardMapper {
 
     // 게시글 삭제 쿼리
     @Delete("""
-                DELETE FROM board WHERE id = #{id}
+            
+                DELETE FROM board WHERE id = #{id}          
             """)
     boolean deleteById(Integer id);
 

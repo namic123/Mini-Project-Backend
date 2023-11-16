@@ -3,6 +3,7 @@ package com.example.miniprojectbackend.service;
 import com.example.miniprojectbackend.domain.Board;
 import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.mapper.BoardMapper;
+import com.example.miniprojectbackend.mapper.CommentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -16,10 +16,13 @@ public interface CommentMapper {
     int insert(Comment comment);
 
     @Select("""
-        SELECT * FROM comment
-        WHERE boardId = #{boardId}
-        ORDER BY inserted DESC 
-            """)
+            SELECT c.boardId, c.id, m.nickName, c.inserted, c.comment, c.memberId
+            FROM comment c
+            JOIN member m
+            ON c.memberId = m.id
+            WHERE c.boardId = #{boardId}
+            ORDER BY inserted DESC
+                """)
     List<Comment> selectByBoardId(Integer boardId);
 
     @Delete("""
