@@ -61,8 +61,21 @@ public class CommentController {
         }
     }
     @PutMapping("edit")
-    public ResponseEntity update(@RequestBody Comment comment){
-        service.update(comment);
-        return ResponseEntity.ok().build();
+    public ResponseEntity update(@RequestBody Comment comment,
+                                 @SessionAttribute(value = "login", required = false)Member login){
+        if(login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if(service.hasAccess(comment.getId(), login)){
+            if (!service.updateValidate(comment)){
+                return ResponseEntity.badRequest().build();
+            }
+            if (service.update(comment)){
+                return ResponseEntity.ok().build();
+            }else {
+                return ResponseEntity.internalServerError().build();
+            }
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 }
