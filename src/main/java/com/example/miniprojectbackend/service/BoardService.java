@@ -62,6 +62,13 @@ public class BoardService {
 
     // 접근 권한 가능 여부
     public boolean hasAccess(Integer id, Member login) {
+        if (login == null) {
+            return false;
+        }
+
+        if (login.isAdmin()) {
+            return true;
+        }
         if( memberService.isAdmin(login)){
             return true;
         }
