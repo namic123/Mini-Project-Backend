@@ -1,6 +1,7 @@
 package com.example.miniprojectbackend.service;
 
 import com.example.miniprojectbackend.domain.Like;
+import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Service;
 public class LikeService {
     private final LikeMapper mapper;
 
-    public void update(Like like) {
+    public void update(Like like, Member login) {
+        like.setMemberId(login.getId());
         // 처음 좋아요 누를 때 : insert
         // 다시 누르면 delete
         int count = 0;
