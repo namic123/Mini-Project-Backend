@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Select;
 
 @Mapper
 public interface LikeMapper {
+    // 좋아요 취소 로직
     @Delete("""
     DELETE FROM boardLike
     WHERE boardId = #{boardId} AND
@@ -15,12 +16,14 @@ public interface LikeMapper {
     """)
     int delete(Like like);
 
+    // 좋아요를 한적 없는 사용자의 아이디와 게시판 ID를 삽입
     @Insert("""
             INSERT INTO boardLike(boardId, memberId)
             VALUES (#{boardId},#{memberId})
             """)
     int insert(Like like);
 
+    // 좋아요 갯수를 반환하는 쿼리
     @Select("""
         SELECT COUNT(id) FROM boardlike
         WHERE boardId = #{boardId}
