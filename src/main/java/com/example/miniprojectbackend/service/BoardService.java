@@ -4,6 +4,7 @@ import com.example.miniprojectbackend.domain.Board;
 import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.mapper.BoardMapper;
 import com.example.miniprojectbackend.mapper.CommentMapper;
+import com.example.miniprojectbackend.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class BoardService {
     private final BoardMapper mapper;
     private final MemberService memberService;
+    private final LikeMapper likeMapper;
 
     // 게시글 등록 로직
     public boolean save(Board board, Member login) {
@@ -52,7 +54,9 @@ public class BoardService {
 
     // 게시글 삭제 로직
     public boolean remove(Integer id) {
+        likeMapper.deleteByBoardId(id);
         return mapper.deleteById(id);
+
     }
 
     // 게시글 수정 로직
