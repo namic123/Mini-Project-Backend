@@ -35,8 +35,10 @@ public interface BoardMapper {
                 LEFT JOIN boardlike l on b.id = l.boardId
                 GROUP BY b.id
                 ORDER BY b.id DESC ;
+                /* 페이징 처리*/
+                LIMIT #{from}, 10;
             """)
-    List<Board> loadList();
+    List<Board> loadList(Integer from);
 
     // 게시글 보기 쿼리
     // 게시글에 nickname을 보여주기 위한 조인

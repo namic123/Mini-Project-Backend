@@ -43,8 +43,16 @@ public class BoardService {
         return true;
     }
     // 게시글 목록 로직
-    public List<Board> list() {
-        return mapper.loadList();
+    public List<Board> list(Integer page) {
+
+        // 페이징 처리
+        // LIMIT의 첫 번째 항목의 인덱스가 0부터 시작하기 때문에 -1을 해준다.
+        // 0 : LIMIT 0, 10
+        // 1 : LIMIT 10,10
+        // 2 : LIMIT 20,10
+        int from = (page -1) * 10;
+
+        return mapper.loadList(from);
     }
 
     // 게시글 보기 로직
