@@ -1,5 +1,6 @@
 package com.example.miniprojectbackend.domain;
 
+import com.example.miniprojectbackend.util.AppUtil;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,5 +14,7 @@ public class Comment {
     private LocalDateTime inserted;
     private String nickName;
 
-
+    public String getAgo(){
+        return AppUtil.getAgo(inserted, LocalDateTime.now());
+    }
 }
