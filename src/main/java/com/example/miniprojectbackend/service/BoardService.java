@@ -78,6 +78,9 @@ public class BoardService {
         /* 예: 45가 마지막 페이지라고 가정했을 때 41~45를 나타내기 위함*/
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
 
+        // 현재 페이지 정보를 나타내기 위함.
+        pageInfo.put("currentPageNumber", page);
+
         // 페이지 그룹 첫 번째와 마지막 번호 할당
         pageInfo.put("startPageNumber", startPageNumber);
         pageInfo.put("endPageNumber", endPageNumber);
