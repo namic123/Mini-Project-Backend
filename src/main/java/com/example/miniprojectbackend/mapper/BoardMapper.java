@@ -19,17 +19,20 @@ public interface BoardMapper {
     int insert(Board board);
 
     // 게시글 목록 쿼리
-    // 게시글 목록에 nickname을 보여주기 위한 조인
+    // 게시글 목록에 nickname, 댓글, 좋아요 수를 보여주기 위한 조인
+
     @Select("""
                 SELECT b.id, 
                 b.title, 
                 b.writer,
                 m.nickName, 
                 b.inserted,
-                COUNT(c.id) commentNum
+                COUNT(DISTINCT c.id) commentNum,
+                COUNT(DISTINCT l.id) countLike
                 FROM board b
                 JOIN member m ON b.writer = m.id
                 LEFT JOIN comment c on b.id =c.boardId
+                LEFT JOIN boardlike l on b.id = l.boardId
                 GROUP BY b.id
                 ORDER BY b.id DESC ;
             """)
