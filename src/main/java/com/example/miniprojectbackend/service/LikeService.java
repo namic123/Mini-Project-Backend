@@ -13,6 +13,7 @@ import java.util.Map;
 public class LikeService {
     private final LikeMapper mapper;
 
+    // 좋아요 클릭 로직
     public Map<String, Object> update(Like like, Member login) {
         // 좋아요를 누른 멤버의 아이디를 할당
         like.setMemberId(login.getId());
@@ -29,5 +30,18 @@ public class LikeService {
         
         return Map.of("like", count == 1,
                 "countLike", countLike);
+    }
+
+    // 게시글의 좋아요 총 개수 로직
+    public Map<String, Object> get(Integer boardId, Member login) {
+        int countLike = mapper.countByBoardId(boardId);
+        Like like = null;
+        // 로그인 상태인 경우
+        if(login != null){
+            // 로그인한 사용자의 좋아요 클릭 여부를 확인
+           like = mapper.selectByBoardIdAndMemberId(boardId, login.getId());
+        }
+
+        return Map.of("like", like != null, "countLike", countLike);
     }
 }

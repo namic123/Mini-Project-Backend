@@ -21,11 +21,19 @@ public class LikeController {
     public ResponseEntity<Map<String, Object>> like(@RequestBody Like like,
                                                     @SessionAttribute(value = "login", required = false) Member login) {
         // 사용자 정보를 받기 위해 로그인 여부를 확인
-        if(login==null){
+        if (login == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         // 응답 본문에 포함
         return ResponseEntity.ok(service.update(like, login));
+    }
+
+    // 게시글의 총 좋아요 수를 요청
+    @GetMapping("board/{boardId}")
+    public ResponseEntity<Map<String, Object>> get(
+            @PathVariable Integer boardId,
+            @SessionAttribute(value = "login", required = false) Member login) {
+    return ResponseEntity.ok(service.get(boardId, login));
     }
 }

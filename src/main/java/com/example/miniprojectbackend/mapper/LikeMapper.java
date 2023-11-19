@@ -29,4 +29,13 @@ public interface LikeMapper {
         WHERE boardId = #{boardId}
             """)
     int countByBoardId(Integer boardId);
+
+    // 해당 board에 대해 사용자의 좋아요 여부 확인 쿼리
+    @Select("""
+            SELECT * 
+            FROM boardlike
+            WHERE boardId = #{boardId}
+                AND memberId = #{memberId}
+            """)
+    Like selectByBoardIdAndMemberId(Integer boardId, String memberId);
 }
