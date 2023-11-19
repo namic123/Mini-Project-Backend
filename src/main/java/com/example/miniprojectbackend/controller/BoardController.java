@@ -44,7 +44,7 @@ public class BoardController {
 
     // 게시글 목록 요청
     @GetMapping("list")
-    public List<Board> list(@RequestParam(value = "page", defaultValue = "1") Integer page){
+    public List<Board> list(@RequestParam(value = "pg", defaultValue = "1") Integer page){
         return service.list(page);
     }
 

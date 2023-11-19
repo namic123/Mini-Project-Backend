@@ -34,7 +34,7 @@ public interface BoardMapper {
                 LEFT JOIN comment c on b.id =c.boardId
                 LEFT JOIN boardlike l on b.id = l.boardId
                 GROUP BY b.id
-                ORDER BY b.id DESC ;
+                ORDER BY b.id DESC
                 /* 페이징 처리*/
                 LIMIT #{from}, 10;
             """)
