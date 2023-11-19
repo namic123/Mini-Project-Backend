@@ -76,4 +76,10 @@ public interface BoardMapper {
     DELETE FROM board WHERE writer = #{writer}
 """)
     int deleteByWriter(String writer);
+
+    // 게시글 총 개수 로직
+    @Select("""
+        SELECT COUNT(*) from board;
+    """)
+    int countAll();
 }

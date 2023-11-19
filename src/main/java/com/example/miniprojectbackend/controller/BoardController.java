@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 // 게시판 컨트롤러
@@ -44,7 +45,9 @@ public class BoardController {
 
     // 게시글 목록 요청
     @GetMapping("list")
-    public List<Board> list(@RequestParam(value = "pg", defaultValue = "1") Integer page){
+    // boardList = List<Board>
+    // pageInfo, ...
+    public Map<String, Object> list(@RequestParam(value = "pg", defaultValue = "1") Integer page){
         return service.list(page);
     }
 
