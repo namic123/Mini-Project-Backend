@@ -79,7 +79,7 @@ public class BoardService {
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
 
         pageInfo.put("startPageNumber", startPageNumber);
-        pageInfo.put("lastPageNumber", lastPageNumber);
+        pageInfo.put("endPageNumber", endPageNumber);
 
         // 페이징
         /* LIMIT의 첫 번째 항목의 인덱스가 0부터 시작하기 때문에 -1을 해준다.
