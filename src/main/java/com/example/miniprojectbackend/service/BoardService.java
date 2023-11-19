@@ -78,8 +78,23 @@ public class BoardService {
         /* 예: 45가 마지막 페이지라고 가정했을 때 41~45를 나타내기 위함*/
         endPageNumber = Math.min(endPageNumber, lastPageNumber);
 
+        // 페이지 그룹 첫 번째와 마지막 번호 할당
         pageInfo.put("startPageNumber", startPageNumber);
         pageInfo.put("endPageNumber", endPageNumber);
+
+        // 페이지 그룹의 이전, 이후 그룹 번호 할당
+        /* 시작 번호 -10으로 이전 그룹으로 이동 */
+        int prevPageNumber = startPageNumber -10;
+        /* 끝 번호 +1로 이후 그룹으로 이동 */
+        int nextPageNumber = endPageNumber +1;
+        /* 현재 페이지가 1~10인 경우 prevPage는 0이 되므로 오류 방지*/
+        if(prevPageNumber > 0){
+            pageInfo.put("prevPageNumber", startPageNumber -10);
+        }
+        /* nextPageNumber가 가장 마지막 페이지 보다 작거나 클 때만 할당 */
+        if(nextPageNumber < lastPageNumber){
+            pageInfo.put("nextPageNumber", nextPageNumber);
+        }
 
         // 페이징
         /* LIMIT의 첫 번째 항목의 인덱스가 0부터 시작하기 때문에 -1을 해준다.
