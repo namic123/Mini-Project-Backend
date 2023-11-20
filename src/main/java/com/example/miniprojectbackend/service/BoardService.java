@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,9 +35,34 @@ public class BoardService {
                 // boardId, name
                 fileMapper.insert(board.getId(), files[i].getOriginalFilename());
                 // 파일을 S3 bucket에 upload
+                // 일단 local에 저장
+                upload(board.getId(), files[i]);
             }
         }
         return cnt == 1;
+    }
+
+    // 파일 업로드를 수행하는 메서드
+    private void upload(Integer boardId, MultipartFile file) {
+        // 파일 저장 경로
+        // C:\Temp\prj1\게시물번호\파일명
+        try{
+            // 파일을 저장할 경로 폴더 지정
+            File folder = new File("C:\\temp\\mini-project\\" + boardId);
+            // 해당 폴더가 존재하지 않을 경우 폴더 생성
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            //  folder.getAbsolutePath()는 folder라는 File 객체의 절대 경로를 문자열로 반환
+            // 구분자와 함께 파일명과 함께 저장
+            // 즉, "C:\\temp\\mini-project\\게시물번호\\파일명"
+            String path = folder.getAbsolutePath() + "\\" + file.getOriginalFilename();
+            // 생성된 경로 path를 사용하여 File객체를 생성
+            // transferTo 메서드는 MultipartFile 객체에 포함된 데이터를 지정된 경로에 있는 새 파일로 복사
+            file.transferTo(new File(path));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     // 게시글 null 값 여부 검증 로직
