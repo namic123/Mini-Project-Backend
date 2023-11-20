@@ -17,6 +17,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -29,7 +30,10 @@ public class BoardService {
     private final FileMapper fileMapper;
 
     // AWS
-    @Value("${aw3.s3.bucket.name}")
+    @Value("${image.file.prefix}")
+    private String urlPrefix;
+
+    @Value("${aws.s3.bucket.name}")
     private String bucket;
 
     private final S3Client s3;
@@ -57,7 +61,7 @@ public class BoardService {
 
     // AWS에 파일 업로드를 수행하는 메서드
     private void upload(Integer boardId, MultipartFile file) throws IOException {
-        String key = "mini-project" + boardId + "/" + file.getOriginalFilename();
+        String key = "mini-project/" + boardId + "/" + file.getOriginalFilename();
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket(bucket)
                 .key(key)
@@ -158,7 +162,14 @@ public class BoardService {
 
     // 게시글 보기 로직
     public Board get(Integer id) {  // view
-        return mapper.selectById(id);
+        Board board = mapper.selectById(id);
+
+        List<String> fileNames = fileMapper.selectNamesByBoardId(id);
+        fileNames = fileNames.stream().map(name -> urlPrefix + "mini-project/"+id+"/"+name)
+                        .toList();
+
+        board.setFileNames(fileNames);
+        return board;
     }
 
     // 게시글 삭제 로직
