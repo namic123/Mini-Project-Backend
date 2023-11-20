@@ -7,6 +7,7 @@ import com.example.miniprojectbackend.mapper.LikeMapper;
 import com.example.miniprojectbackend.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class) // checked 포함 문제 발생 시 rollback
 public class MemberService {
     private final MemberMapper mapper;
     private final BoardMapper boardMapper;

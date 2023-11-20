@@ -5,11 +5,13 @@ import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class) // checked 포함 문제 발생 시 rollback
 public class LikeService {
     private final LikeMapper mapper;
 

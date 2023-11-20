@@ -7,14 +7,17 @@ import com.example.miniprojectbackend.mapper.FileMapper;
 import com.example.miniprojectbackend.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class) // checked 포함 문제 발생 시 rollback
 public class BoardService {
     private final BoardMapper mapper;
     private final MemberService memberService;
@@ -22,7 +25,7 @@ public class BoardService {
     private final FileMapper fileMapper;
 
     // 게시글 등록 로직
-    public boolean save(Board board, MultipartFile[] files, Member login) {
+    public boolean save(Board board, MultipartFile[] files, Member login) throws IOException{
         // 글 작성 시 작성자를 ID로 선언
         board.setWriter(login.getId());
         int cnt = mapper.insert(board);
@@ -43,10 +46,10 @@ public class BoardService {
     }
 
     // 파일 업로드를 수행하는 메서드
-    private void upload(Integer boardId, MultipartFile file) {
+    private void upload(Integer boardId, MultipartFile file) throws IOException {
         // 파일 저장 경로
         // C:\Temp\prj1\게시물번호\파일명
-        try{
+
             // 파일을 저장할 경로 폴더 지정
             File folder = new File("C:\\temp\\mini-project\\" + boardId);
             // 해당 폴더가 존재하지 않을 경우 폴더 생성
@@ -60,9 +63,7 @@ public class BoardService {
             // 생성된 경로 path를 사용하여 File객체를 생성
             // transferTo 메서드는 MultipartFile 객체에 포함된 데이터를 지정된 경로에 있는 새 파일로 복사
             file.transferTo(new File(path));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     // 게시글 null 값 여부 검증 로직
