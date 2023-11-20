@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -21,11 +22,13 @@ public class BoardController {
 
     // 게시글 저장 요청
     @PostMapping("add")
-    public ResponseEntity add(@RequestBody Board board,
+    public ResponseEntity add(Board board, // 인코딩 타입이 multipart-formdata인 경우 request body로 받을 수 없다.
+                              @RequestParam(value = "files[]", required = false) MultipartFile[] files,
                               // HTTP 세션에서 login 속성에 저장된 Member 객체를 가져온다.
                               // 그 세션에서 추출한 LOGIN 속성의 값이 login 매개변수에 주입
                               // 매개변수 login을 통해 권한 여부를 결정
                               @SessionAttribute(value = "login", required = false) Member login) {
+
         // 비로그인 상태인 경우
         if(login == null){
             // 권한 없음 상태코드 반환
@@ -36,7 +39,7 @@ public class BoardController {
             return ResponseEntity.badRequest().build(); // 400 상태코드
         }
 
-        if (service.save(board, login)) { // 저장 성공
+        if (service.save(board, files, login)) { // 저장 성공
             return ResponseEntity.ok().build(); // 200 응답 상태
         }
         return ResponseEntity.internalServerError().build(); // 500 상태코드

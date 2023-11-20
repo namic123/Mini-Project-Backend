@@ -3,9 +3,11 @@ package com.example.miniprojectbackend.service;
 import com.example.miniprojectbackend.domain.Board;
 import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.mapper.BoardMapper;
+import com.example.miniprojectbackend.mapper.FileMapper;
 import com.example.miniprojectbackend.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,12 +18,25 @@ public class BoardService {
     private final BoardMapper mapper;
     private final MemberService memberService;
     private final LikeMapper likeMapper;
+    private final FileMapper fileMapper;
 
     // 게시글 등록 로직
-    public boolean save(Board board, Member login) {
-        // 글 작성 시 작성자를 ID로 서정
+    public boolean save(Board board, MultipartFile[] files, Member login) {
+        // 글 작성 시 작성자를 ID로 선언
         board.setWriter(login.getId());
-        return mapper.insert(board) == 1;
+        int cnt = mapper.insert(board);
+
+        // 파일이 입력된 경우에만 실행
+        if(files != null) {
+            // 파일 배열을 반복문으로 돌려서 insert
+            for(int i=0; i< files.length; i++) {
+                // boardFile 테이블에 files 정보 저장
+                // boardId, name
+                fileMapper.insert(board.getId(), files[i].getOriginalFilename());
+                // 파일을 S3 bucket에 upload
+            }
+        }
+        return cnt == 1;
     }
 
     // 게시글 null 값 여부 검증 로직

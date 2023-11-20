@@ -13,6 +13,8 @@ public interface BoardMapper {
                 INSERT INTO board (title, content, writer)
                 VALUES (#{title}, #{content}, #{writer})  /* DTO와 Mapping */    
             """)
+    // keyProperty = "id"는 생성된 키를 Board 객체의 id 속성에 매핑하도록 지정
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(Board board);
 
     // 게시글 목록 쿼리
