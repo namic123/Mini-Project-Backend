@@ -48,7 +48,7 @@ public class BoardService {
         Map<String, Object> pageInfo = new HashMap<>();
 
         // 페이징 처리
-        int countAll = mapper.countAll();
+        int countAll = mapper.countAll("%"+keyword+"%");
         // 총 페이지의 마지막 번호
 /*        +1이 필요한 이유
           총 게시글이 39개라고 가정

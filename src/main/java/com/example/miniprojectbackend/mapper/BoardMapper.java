@@ -78,7 +78,8 @@ public interface BoardMapper {
 
     // 게시글 총 개수 로직
     @Select("""
-        SELECT COUNT(*) from board;
+        SELECT COUNT(*) from board
+        WHERE content LIKE #{keyword} OR title LIKE #{keyword};
     """)
-    int countAll();
+    int countAll(String keyword);
 }
