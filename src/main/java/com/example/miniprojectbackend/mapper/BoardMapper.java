@@ -2,11 +2,8 @@ package com.example.miniprojectbackend.mapper;
 
 import com.example.miniprojectbackend.domain.Board;
 import org.apache.ibatis.annotations.*;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface BoardMapper {
@@ -33,12 +30,14 @@ public interface BoardMapper {
                 JOIN member m ON b.writer = m.id
                 LEFT JOIN comment c on b.id =c.boardId
                 LEFT JOIN boardlike l on b.id = l.boardId
+                WHERE b.content LIKE #{keyword}
+                OR b.title LIKE #{keyword}
                 GROUP BY b.id
                 ORDER BY b.id DESC
                 /* 페이징 처리*/
                 LIMIT #{from}, 10;
             """)
-    List<Board> loadList(Integer from);
+    List<Board> loadList(Integer from, String keyword);
 
     // 게시글 보기 쿼리
     // 게시글에 nickname을 보여주기 위한 조인

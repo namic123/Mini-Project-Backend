@@ -3,15 +3,12 @@ package com.example.miniprojectbackend.service;
 import com.example.miniprojectbackend.domain.Board;
 import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.mapper.BoardMapper;
-import com.example.miniprojectbackend.mapper.CommentMapper;
 import com.example.miniprojectbackend.mapper.LikeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +43,7 @@ public class BoardService {
         return true;
     }
     // 게시글 목록 로직
-    public Map<String, Object> list(Integer page) {
+    public Map<String, Object> list(Integer page, String keyword) {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
@@ -108,7 +105,7 @@ public class BoardService {
          */
         int from = (page -1) * 10;
         // 게시글을 from번째 부터 10개씩 객체형태로 담긴다.
-        map.put("boardList", mapper.loadList(from));
+        map.put("boardList", mapper.loadList(from, "%"+keyword+"%"));
         // 페이지 그룹을 나타내는 startPageNumber와 lastPageNumber가 담긴다.
         map.put("pageInfo", pageInfo);
         return map;

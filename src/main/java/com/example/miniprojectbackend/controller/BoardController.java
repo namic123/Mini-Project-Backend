@@ -45,10 +45,11 @@ public class BoardController {
 
     // 게시글 목록 요청
     @GetMapping("list")
-    // boardList = List<Board>
-    // pageInfo, ...
-    public Map<String, Object> list(@RequestParam(value = "pg", defaultValue = "1") Integer page){
-        return service.list(page);
+    // 게시글 리스트 반환
+    // 페이지 정보(페이지 그룹, 현재 페이지 정보)를 반환
+    public Map<String, Object> list(@RequestParam(value = "pg", defaultValue = "1") Integer page,
+                                    @RequestParam(value = "k", defaultValue = "") String keyword){
+        return service.list(page, keyword);
     }
 
     // 게시글 보기 요청
