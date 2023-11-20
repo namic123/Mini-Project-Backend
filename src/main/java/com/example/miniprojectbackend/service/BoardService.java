@@ -1,6 +1,7 @@
 package com.example.miniprojectbackend.service;
 
 import com.example.miniprojectbackend.domain.Board;
+import com.example.miniprojectbackend.domain.BoardFile;
 import com.example.miniprojectbackend.domain.Member;
 import com.example.miniprojectbackend.mapper.BoardMapper;
 import com.example.miniprojectbackend.mapper.FileMapper;
@@ -164,11 +165,12 @@ public class BoardService {
     public Board get(Integer id) {  // view
         Board board = mapper.selectById(id);
 
-        List<String> fileNames = fileMapper.selectNamesByBoardId(id);
-        fileNames = fileNames.stream().map(name -> urlPrefix + "mini-project/"+id+"/"+name)
-                        .toList();
-
-        board.setFileNames(fileNames);
+        List<BoardFile> boardFiles = fileMapper.selectNamesByBoardId(id);
+        for(BoardFile boardFile : boardFiles){
+            String url = urlPrefix + "mini-project/" + id+ "/" + boardFile.getName();
+            boardFile.setUrl(url);
+        }
+        board.setFiles(boardFiles);
         return board;
     }
 
