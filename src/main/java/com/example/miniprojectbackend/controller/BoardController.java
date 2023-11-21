@@ -24,7 +24,7 @@ public class BoardController {
     // 게시글 저장 요청
     @PostMapping("add")
     public ResponseEntity add(Board board, // 인코딩 타입이 multipart-formdata인 경우 request body로 받을 수 없다.
-                              @RequestParam(value = "files[]", required = false) MultipartFile[] files,
+                              @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
                               // HTTP 세션에서 login 속성에 저장된 Member 객체를 가져온다.
                               // 그 세션에서 추출한 LOGIN 속성의 값이 login 매개변수에 주입
                               // 매개변수 login을 통해 권한 여부를 결정
