@@ -21,6 +21,7 @@ public class Board {
     private LocalDateTime inserted;
     private Integer countLike;
     private List<BoardFile> files;
+    private Integer countFile;
     public String getAgo(){
         return AppUtil.getAgo(inserted, LocalDateTime.now());
     }
