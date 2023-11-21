@@ -174,9 +174,26 @@ public class BoardService {
         board.setFiles(boardFiles);
         return board;
     }
+    // 게시글 수정 로직
+    public boolean update(Board board, MultipartFile[] files) throws IOException {
+        boolean cnt = mapper.update(board) ;
 
+        // 파일이 입력된 경우에만 실행
+        if (files != null) {
+            // 파일 배열을 반복문으로 돌려서 insert
+            for (int i = 0; i < files.length; i++) {
+                // boardFile 테이블에 files 정보 저장
+                // boardId, name
+                fileMapper.insert(board.getId(), files[i].getOriginalFilename());
+                // 파일을 S3 bucket에 upload
+                // 일단 local에 저장
+                upload(board.getId(), files[i]);
+            }
+        }
+        return cnt;
+    }
     // DB의 파일 레코드와 AWS에 저장된 파일 삭제
-    private void deleteFile(Integer id){
+    public boolean deleteFile(Integer id){
         // 파일명 조회
         List<BoardFile> boardFiles = fileMapper.selectNamesByBoardId(id);
 
@@ -192,7 +209,7 @@ public class BoardService {
             s3.deleteObject(objectRequest);
         }
 
-        fileMapper.deleteByBoardId(id);
+        return fileMapper.deleteByBoardId(id) ==1;
     }
     // 게시글 삭제 로직
     public boolean remove(Integer id) {
@@ -206,10 +223,6 @@ public class BoardService {
 
     }
 
-    // 게시글 수정 로직
-    public boolean update(Board board) {
-        return mapper.update(board);
-    }
 
     // 접근 권한 가능 여부
     public boolean hasAccess(Integer id, Member login) {

@@ -70,11 +70,6 @@ public class BoardController {
         if(login == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        // 접근 권한이 없는 경우
-        if (!service.hasAccess(id, login)) {
-            // 403 응답
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
         if(service.remove(id)){
             return ResponseEntity.ok().build();     // 200 상태코드 (요청 성공)
         }else{
@@ -82,10 +77,30 @@ public class BoardController {
         }
     }
 
+    @DeleteMapping("deleteFile/{id}")
+    public ResponseEntity deleteFile(@PathVariable Integer id,
+                                     @SessionAttribute(value = "login", required = false) Member login){
+
+        System.out.println("BoardController.deleteFile");
+        // 비 로그인 상태일 경우
+        if(login == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // 접근 권한이 없는 경우
+        if (!service.hasAccess(id, login)) {
+            // 403 응답
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if(service.deleteFile(id)){
+            return ResponseEntity.ok().build();     // 200 상태코드 (요청 성공)
+        }else{
+            return ResponseEntity.internalServerError().build();    // 500 상태코드 (서버 에러)
+        }
+    }
     // 게시글 수정
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Board board,
-                               @SessionAttribute(value = "login",required = false) Member login){
+    public ResponseEntity edit(Board board, @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] files,
+                               @SessionAttribute(value = "login",required = false) Member login) throws IOException {
 
         if (login == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //401
@@ -95,7 +110,7 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         if(service.validate(board)) {       // null 값 검증 service 로직
-            if (service.update(board)) {        // 업데이트 로직
+            if (service.update(board, files)) {        // 업데이트 로직
                 return ResponseEntity.ok().build();         // 200 성공
             } else {
                 return ResponseEntity.internalServerError().build();    // 500 서버 에러
