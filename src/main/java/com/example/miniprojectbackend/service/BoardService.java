@@ -177,6 +177,7 @@ public class BoardService {
     // 게시글 삭제 로직
     public boolean remove(Integer id) {
         likeMapper.deleteByBoardId(id);
+        fileMapper.deleteByBoardId(id);
         return mapper.deleteById(id);
 
     }
