@@ -84,8 +84,14 @@ public class BoardController {
 
     // 게시글 수정
     @PutMapping("edit")
-    public ResponseEntity edit(@RequestBody Board board,
-                               @SessionAttribute(value = "login",required = false) Member login){
+    public ResponseEntity edit(Board board,
+                               @RequestParam(value = "removeFileIds[]", required = false) List<Integer> removeFileIds,
+                               @RequestParam(value = "uploadFiles[]", required = false) MultipartFile[] uploadFiles,
+                               @SessionAttribute(value = "login", required = false) Member login) throws IOException {
+
+        System.out.println("board = " + board);
+        System.out.println("removeFileIds = " + removeFileIds);
+        System.out.println("uploadFiles = " + uploadFiles);
 
         if (login == null){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); //401
@@ -95,7 +101,7 @@ public class BoardController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         if(service.validate(board)) {       // null 값 검증 service 로직
-            if (service.update(board)) {        // 업데이트 로직
+            if (service.update(board, removeFileIds, uploadFiles)) {        // 업데이트 로직
                 return ResponseEntity.ok().build();         // 200 성공
             } else {
                 return ResponseEntity.internalServerError().build();    // 500 서버 에러
