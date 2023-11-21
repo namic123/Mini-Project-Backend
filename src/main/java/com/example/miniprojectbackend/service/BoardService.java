@@ -94,12 +94,12 @@ public class BoardService {
     }
 
     // 게시글 목록 로직
-    public Map<String, Object> list(Integer page, String keyword) {
+    public Map<String, Object> list(Integer page, String keyword, String category) {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> pageInfo = new HashMap<>();
 
         // 페이징 처리
-        int countAll = mapper.countAll("%" + keyword + "%");
+        int countAll = mapper.countAll("%" + keyword + "%" , category);
         // 총 페이지의 마지막 번호
 /*        +1이 필요한 이유
           총 게시글이 39개라고 가정
@@ -156,7 +156,7 @@ public class BoardService {
          */
         int from = (page - 1) * 10;
         // 게시글을 from번째 부터 10개씩 객체형태로 담긴다.
-        map.put("boardList", mapper.loadList(from, "%" + keyword + "%"));
+        map.put("boardList", mapper.loadList(from, "%" + keyword + "%", category));
         // 페이지 그룹을 나타내는 startPageNumber와 lastPageNumber가 담긴다.
         map.put("pageInfo", pageInfo);
         return map;

@@ -21,27 +21,40 @@ public interface BoardMapper {
     // 게시글 목록에 nickname, 댓글, 좋아요 수를 보여주기 위한 조인
 
     @Select("""
-                SELECT b.id, 
-                b.title, 
-                b.writer,
-                m.nickName, 
-                b.inserted,
-                COUNT(DISTINCT c.id) commentNum,
-                COUNT(DISTINCT l.id) countLike,
-                COUNT(DISTINCT f.id) countFile
-                FROM board b
-                JOIN member m ON b.writer = m.id
-                LEFT JOIN comment c on b.id =c.boardId
-                LEFT JOIN boardlike l on b.id = l.boardId
-                LEFT JOIN boardfile f ON b.id = f.boardId
-                WHERE b.content LIKE #{keyword}
-                OR b.title LIKE #{keyword}
-                GROUP BY b.id
-                ORDER BY b.id DESC
-                /* 페이징 처리*/
-                LIMIT #{from}, 10;
+                <script>
+                    SELECT b.id, 
+                    b.title, 
+                    b.writer,
+                    m.nickName, 
+                    b.inserted,
+                    COUNT(DISTINCT c.id) commentNum,
+                    COUNT(DISTINCT l.id) countLike,
+                    COUNT(DISTINCT f.id) countFile
+                    FROM board b
+                    JOIN member m ON b.writer = m.id
+                    LEFT JOIN comment c on b.id =c.boardId
+                    LEFT JOIN boardlike l on b.id = l.boardId
+                    LEFT JOIN boardfile f ON b.id = f.boardId
+                    WHERE                 <script>
+                    SELECT COUNT(*) from board
+                    WHERE 
+                
+                /* OR가 있으면 삭제 */
+                    <trim prefixOverrides="OR">
+                        <if test="catergory == 'all' or category == 'title'">
+                            OR title LIKE #{keyword}
+                        </if>
+                        <if test="catergory == 'all' or category == 'content'">
+                            OR content LIKE #{keyword} 
+                        </if>
+                    </trim>
+                    GROUP BY b.id
+                    ORDER BY b.id DESC
+                    /* 페이징 처리*/
+                    LIMIT #{from}, 10;
+                </script>
             """)
-    List<Board> loadList(Integer from, String keyword);
+    List<Board> loadList(Integer from, String keyword, String category);
 
     // 게시글 보기 쿼리
     // 게시글에 nickname을 보여주기 위한 조인
@@ -81,8 +94,20 @@ public interface BoardMapper {
 
     // 게시글 총 개수 로직
     @Select("""
-        SELECT COUNT(*) from board
-        WHERE content LIKE #{keyword} OR title LIKE #{keyword};
-    """)
-    int countAll(String keyword);
+                <script>
+                SELECT COUNT(*) from board
+                WHERE 
+                
+                /* OR가 있으면 삭제 */
+                <trim prefixOverrides="OR">
+                    <if test="catergory == 'all' or category == 'title'">
+                        OR title LIKE #{keyword}
+                    </if>
+                    <if test="catergory == 'all' or category == 'content'">
+                        OR content LIKE #{keyword} 
+                    </if>
+                </trim>
+                </script>
+            """)
+    int countAll(String keyword, String category);
 }

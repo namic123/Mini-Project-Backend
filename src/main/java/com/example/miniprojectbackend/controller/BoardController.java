@@ -52,8 +52,10 @@ public class BoardController {
     // 게시글 리스트 반환
     // 페이지 정보(페이지 그룹, 현재 페이지 정보)를 반환
     public Map<String, Object> list(@RequestParam(value = "pg", defaultValue = "1") Integer page,
-                                    @RequestParam(value = "k", defaultValue = "") String keyword){
-        return service.list(page, keyword);
+                                    @RequestParam(value = "k", defaultValue = "") String keyword,
+                                    @RequestParam(value = "c", defaultValue = "all") String category
+                                    ){
+        return service.list(page, keyword, category);
     }
 
     // 게시글 보기 요청
