@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -174,10 +175,33 @@ public class BoardService {
         return board;
     }
 
+    // DB의 파일 레코드와 AWS에 저장된 파일 삭제
+    private void deleteFile(Integer id){
+        // 파일명 조회
+        List<BoardFile> boardFiles = fileMapper.selectNamesByBoardId(id);
+
+        // s3 bucket objects 지우기
+        for(BoardFile file : boardFiles){
+            String key = "mini-project/" +id+"/"+file.getName();
+
+            DeleteObjectRequest objectRequest = DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(key)
+                    .build();
+
+            s3.deleteObject(objectRequest);
+        }
+
+        fileMapper.deleteByBoardId(id);
+    }
     // 게시글 삭제 로직
     public boolean remove(Integer id) {
+
+        // 좋아요 레코드 삭제
         likeMapper.deleteByBoardId(id);
-        fileMapper.deleteByBoardId(id);
+
+        deleteFile(id);
+
         return mapper.deleteById(id);
 
     }
