@@ -41,10 +41,10 @@ public interface BoardMapper {
                 
                 /* OR가 있으면 삭제 */
                     <trim prefixOverrides="OR">
-                        <if test="catergory == 'all' or category == 'title'">
+                        <if test="category == 'all' or category == 'title'">
                             OR title LIKE #{keyword}
                         </if>
-                        <if test="catergory == 'all' or category == 'content'">
+                        <if test="category == 'all' or category == 'content'">
                             OR content LIKE #{keyword} 
                         </if>
                     </trim>
@@ -100,10 +100,10 @@ public interface BoardMapper {
                 
                 /* OR가 있으면 삭제 */
                 <trim prefixOverrides="OR">
-                    <if test="catergory == 'all' or category == 'title'">
+                    <if test="category == 'all' or category == 'title'">
                         OR title LIKE #{keyword}
                     </if>
-                    <if test="catergory == 'all' or category == 'content'">
+                    <if test="category == 'all' or category == 'content'">
                         OR content LIKE #{keyword} 
                     </if>
                 </trim>
