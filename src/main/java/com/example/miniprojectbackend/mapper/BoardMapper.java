@@ -35,8 +35,6 @@ public interface BoardMapper {
                     LEFT JOIN comment c on b.id =c.boardId
                     LEFT JOIN boardlike l on b.id = l.boardId
                     LEFT JOIN boardfile f ON b.id = f.boardId
-                    WHERE                 <script>
-                    SELECT COUNT(*) from board
                     WHERE 
                 
                 /* OR가 있으면 삭제 */
