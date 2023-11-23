@@ -15,8 +15,7 @@
   * Signup
   * Admin page
 
-## Skills
-### Spring
+### Spring-Boot
 * #### Controller
   * Annotations
     * @RestController
