@@ -3,6 +3,7 @@ package com.example.miniprojectbackend.util;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 
 // 유틸리티 패키지는
@@ -10,8 +11,8 @@ import java.time.temporal.ChronoUnit;
 public class AppUtil {
 
     // 날짜 형식 변환 유틸리티
-    public static String getAgo(LocalDateTime a, LocalDateTime b) {
-
+    public static String getAgo(LocalDateTime a) {
+        LocalDateTime b = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
         // inserted가 now와 비교했을 때 1년 이상인지 확인
         // 1년 이상 지났다면 참
         if (a.isBefore(b.minusYears(1))) {
